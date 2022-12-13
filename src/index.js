@@ -11,7 +11,7 @@ const msalConfig = {
   auth: {
     clientId: process.env.REACT_APP_MSAL_CLIENT_ID,
     authority: process.env.REACT_APP_MSAL_AUTHORITY,
-    redirectUri: "https://github.com/tmrk/dashtop/"
+    redirectUri: "https://tmrk.github.io/DashTop/"
   },
   cache: {
     cacheLocation: "sessionStorage", // This configures where your cache will be stored
