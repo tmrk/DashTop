@@ -32,6 +32,8 @@
     "workbox-streams": "^6.5.4"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -55,5 +57,8 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "."
+  "homepage": "https://tmrk.github.io/DashTop/",
+  "devDependencies": {
+    "gh-pages": "^4.0.0"
+  }
 }
