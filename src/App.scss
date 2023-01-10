@@ -56,23 +56,68 @@ div.App {
       
       li {
         margin: 5px 0;
-        padding: 10px 20px;
         border-left: 10px solid rgba(255,255,255,0.3);
         background-color: rgba(255,255,255,0.15);
         font-size: 14px;
         letter-spacing: 1px;
+        display: flex;
 
-        time {
-          padding: 0 0 2px;
-          display: block;
-          font-weight: bold;
+        &.status_ended {
+          opacity: 0.4;
+        }
 
-          span {
-            padding-left: 1ch;
-            color: rgba(255,255,255,0.3);
-            text-transform: uppercase;
+        &.status_soon {
+          border-left: 10px solid rgb(255, 242, 0);
+        }
+
+        &.status_happening {
+          border-left: 10px solid rgb(0, 197, 59);
+        }
+
+        & > div {
+          padding: 10px 20px;
+          flex: 1;
+
+          time {
+            padding: 0 0 2px;
+            display: block;
+            font-weight: bold;
+  
+            span {
+              padding-left: 1ch;
+              color: rgba(255,255,255,0.3);
+              text-transform: uppercase;
+            }
           }
         }
+
+        .call {
+          width: 60px;
+          color: rgba(255,255,255,0.4);
+          text-decoration: none;
+          text-transform: uppercase;
+          font-size: 11px;
+          font-weight: bold;
+          letter-spacing: 1px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+
+          svg path {
+            fill: rgba(255,255,255,0.4);
+          }
+        }
+
+        .call:hover {
+          background-color: rgba(255,255,255,0.15);
+          color: rgb(255,255,255);
+
+          svg path {
+            fill: rgb(255,255,255);
+          }
+        }
+
       }
     }
   }
@@ -267,6 +312,63 @@ div.App {
         height: auto;
       }
     }
+  }
+}
+
+#clipboard {
+  margin: 40px 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  user-select: none;
+  
+  #clearformat {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    div {
+      width: 340px;
+      padding: 15px 0;
+      background-color: rgba(255,255,255,0.15);
+      border-radius: 30px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: rgba(255,255,255,0.4);
+      }
+    }
+  }
+
+  #emojicopy {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    span {
+      padding: 15px;
+      border-radius: 30px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        background-color: rgba(255,255,255,0.9);
+      }
+    }
+  }
+
+  #copymessage {
+    opacity: 0.8;
+    font-size: 0.9em;
   }
 }
 

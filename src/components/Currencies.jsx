@@ -122,7 +122,7 @@ const Symbol = ({ symbol, rates, conversions, setConversions }) => {
       onClick={handleClick}
       className={conversions.base === symbol ? 'selected' : ''}
     >
-      <span className='icon paste' onClick={handleClickPaste} title='Paste amount'>
+      <span className='icon paste' onClick={handleClickPaste}>
         <ContentPasteGoIcon />
       </span>
       <span className='amount'>
@@ -146,7 +146,7 @@ const Symbol = ({ symbol, rates, conversions, setConversions }) => {
         }
       </span>
       <span className='symbol'>{symbol}</span>
-      <span className='icon copy' onClick={handleClickCopy} title='Copy amount'>
+      <span className='icon copy' onClick={handleClickCopy}>
         <ContentCopyIcon />
       </span>
     </div>

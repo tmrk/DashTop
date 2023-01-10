@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useMsal, useIsAuthenticated } from "@azure/msal-react";
 import { DateTime } from "luxon";
+import CallIcon from '@mui/icons-material/Call';
 
 const callMsGraph = async (accessToken) => {
   const headers = new Headers();
@@ -12,8 +13,8 @@ const callMsGraph = async (accessToken) => {
   };
 
   const endpoint = "https://graph.microsoft.com/v1.0/me/calendar/calendarview" 
-    + "?startDateTime=" + DateTime.now().toISODate() 
-    + "&endDateTime=" + DateTime.now().plus({ days: 14 }).toISODate();
+    + "?startDateTime=" + DateTime.now().toISODate() // the start of today (includes even past events of today)
+    + "&endDateTime=" + DateTime.now().plus({ days: 7 }).toISODate();
   return fetch(endpoint, options)
     .then(response => response.json())
     .catch(error => console.log(error));
@@ -47,42 +48,74 @@ const SignOutButton = () => {
 export default function App() {
   const isAuthenticated = useIsAuthenticated();
   const { instance, accounts } = useMsal();
-  const [graphData, setGraphData] = useState(null);
-  useEffect(() => {
+  const [graphData, setGraphData] = useState( // load cashed events immediately
+    localStorage.getItem("calendarEvents") ?
+      JSON.parse(localStorage.getItem("calendarEvents")) :
+      null
+  );
+
+  const updateCalendar = (repeat) => {
     instance.acquireTokenSilent({
       ...loginRequest,
       account: accounts[0]
     }).then((response) => {
       callMsGraph(response.accessToken).then((response) => {
-        setGraphData(response);
-        console.log(response.value);
+        setGraphData(response.value);
+        localStorage.setItem("calendarEvents", JSON.stringify(response.value));
+        console.log(response);
         console.log(DateTime.now().toISO());
         console.log(new Date().toISOString())
       });
     });
-  }, [isAuthenticated]);
+    if (repeat) setTimeout(() => updateCalendar(repeat), repeat);
+  }
+
+  useEffect(() => updateCalendar(60000/*repeat milliseconds*/), [isAuthenticated]);
+
+  const eventStatus = (event) => {
+    const start = DateTime.fromISO(event.start.dateTime, {zone: event.start.timeZone});
+    const end = DateTime.fromISO(event.end.dateTime, {zone: event.end.timeZone});
+    const now = DateTime.local();
+    if (start < now && end > now) return "happening";
+    else if (start < now && end < now) return "ended";
+    else if (start.diff(now, 'minutes').toObject().minutes <= 15) return "soon";
+  }
 
   return (
     <div id="calendar">
       {isAuthenticated && graphData ? 
         <ul>
-          {graphData.value.map((event) => (
-            <li key={event.id}>
-              <time>
-                {DateTime.fromISO(event.start.dateTime, {zone: event.start.timeZone})
-                .setZone(DateTime.local().zoneName)
-                .toLocaleString(DateTime.TIME_24_SIMPLE)}
-                &#8211;
-                {DateTime.fromISO(event.end.dateTime, {zone: event.end.timeZone})
-                .setZone(DateTime.local().zoneName)
-                .toLocaleString(DateTime.TIME_24_SIMPLE)}
-                <span>
-                {DateTime.fromISO(event.start.dateTime, {zone: event.start.timeZone})
+          {graphData.map((event) => (
+            <li 
+              key={event.id} 
+              className={"status_" + eventStatus(event)} 
+              order={new Date(event.start.dateTime).getTime()}
+            >
+              <div>
+                <time>
+                  {DateTime.fromISO(event.start.dateTime, {zone: event.start.timeZone})
                   .setZone(DateTime.local().zoneName)
-                  .toRelativeCalendar()}
-                </span>
-              </time>
-              {event.subject}
+                  .toLocaleString(DateTime.TIME_24_SIMPLE)}
+                  &#8211;
+                  {DateTime.fromISO(event.end.dateTime, {zone: event.end.timeZone})
+                  .setZone(DateTime.local().zoneName)
+                  .toLocaleString(DateTime.TIME_24_SIMPLE)}
+                  {}
+                  <span>
+                  {DateTime.fromISO(event.start.dateTime, {zone: event.start.timeZone})
+                    .setZone(DateTime.local().zoneName)
+                    .toRelativeCalendar()}
+                  </span>
+                </time>
+                {event.subject}
+              </div>
+              {event.isOnlineMeeting 
+              && (eventStatus(event) === "happening" || eventStatus(event) === "soon") 
+              ? 
+              <a href={event.onlineMeeting.joinUrl} class="call" target="_blank">
+                <CallIcon />
+                <span>Join</span>
+              </a> : ""}
             </li>
           ))}
         </ul>

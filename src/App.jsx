@@ -3,6 +3,7 @@ import Clocks from './components/Clocks'
 import Calendar from './components/Calendar'
 import { ReactComponent as Logo } from './assets/DRC_logo_SVG_horizontal_rgb.svg'
 import Currencies from './components/Currencies'
+import Clipboard from './components/Clipboard'
 
 function App() {
 
@@ -14,6 +15,8 @@ function App() {
           <Clocks />
           <br />
           <Currencies />
+          <br />
+          <Clipboard />
         </section>
         <section id="right">
           <div className="upper">
