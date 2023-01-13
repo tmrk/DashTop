@@ -31,7 +31,7 @@ const SignInButton = () => {
       console.log(e);
     });
   }
-  return (<button onClick={handleLogin}>Sign in</button>);
+  return (<button onClick={handleLogin} id="signinbutton">Sign in</button>);
 }
 
 const SignOutButton = () => {
@@ -60,8 +60,9 @@ export default function App() {
       account: accounts[0]
     }).then((response) => {
       callMsGraph(response.accessToken).then((response) => {
-        setGraphData(response.value);
-        localStorage.setItem("calendarEvents", JSON.stringify(response.value));
+        const sortedEvents = response.value.sort((a,b) => new Date(a.start.dateTime).getTime() - new Date(b.start.dateTime).getTime());
+        setGraphData(sortedEvents);
+        localStorage.setItem("calendarEvents", JSON.stringify(sortedEvents));
         console.log(response);
         console.log(DateTime.now().toISO());
         console.log(new Date().toISOString())

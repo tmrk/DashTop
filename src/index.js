@@ -11,7 +11,9 @@ const msalConfig = {
   auth: {
     clientId: process.env.REACT_APP_MSAL_CLIENT_ID,
     authority: process.env.REACT_APP_MSAL_AUTHORITY,
-    redirectUri: "https://tmrk.github.io/DashTop/"
+    redirectUri: 
+      //"http://localhost:3000/"
+      "https://tmrk.github.io/DashTop/"
   },
   cache: {
     cacheLocation: "sessionStorage", // This configures where your cache will be stored
@@ -46,11 +48,9 @@ const msalInstance = new PublicClientApplication(msalConfig);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <MsalProvider instance={msalInstance}>
-      <App />
-    </MsalProvider>
-  </React.StrictMode>
+  <MsalProvider instance={msalInstance}>
+    <App />
+  </MsalProvider>
 );
 
 serviceWorkerRegistration.register();

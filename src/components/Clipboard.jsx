@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import FormatClearIcon from '@mui/icons-material/FormatClear';
 
-const emojisToCopy = ["👍", "🙏", "👉", "👆", "👇", "👈", "😁", "😛", "😊"];
+const emojisToCopy = ["👍", "🙏", "👈", "👉", "👆", "👇", "😁", "😛", "😊"];
 
 export default function Clipboard() {
 
