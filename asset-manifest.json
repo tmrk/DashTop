@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/DashTop/static/css/main.0a1093d7.css",
-    "main.js": "/DashTop/static/js/main.7642f92e.js",
+    "main.js": "/DashTop/static/js/main.35541af1.js",
     "static/media/Inconsolata-Medium.ttf": "/DashTop/static/media/Inconsolata-Medium.77a917ae515cdcbb5732.ttf",
     "service-worker.js": "/DashTop/service-worker.js",
     "static/media/DRC_logo_SVG_horizontal_rgb.svg": "/DashTop/static/media/DRC_logo_SVG_horizontal_rgb.887dbb0965ce5380ff1c25d8b834e26f.svg",
     "index.html": "/DashTop/index.html",
     "main.0a1093d7.css.map": "/DashTop/static/css/main.0a1093d7.css.map",
-    "main.7642f92e.js.map": "/DashTop/static/js/main.7642f92e.js.map"
+    "main.35541af1.js.map": "/DashTop/static/js/main.35541af1.js.map"
   },
   "entrypoints": [
     "static/css/main.0a1093d7.css",
-    "static/js/main.7642f92e.js"
+    "static/js/main.35541af1.js"
   ]
 }
