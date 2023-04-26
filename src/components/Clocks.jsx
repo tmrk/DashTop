@@ -1,38 +1,43 @@
 import { useEffect, useState } from 'react'
+import { DateTime } from 'luxon';
+
+const timeZones = [
+  {name: 'CPH', zone: 'Europe/Copenhagen'},
+  {name: 'KTM', zone: 'Asia/Kathmandu'}
+];
 
 export default function Clocks() {
 
-  const [time, setTime] = useState('00:00');
-  const [timeOffset, setTimeOffset] = useState('00:00');
+  const [clocks, setClocks] = useState(timeZones);
+
+  const updateClocks = () => {
+    const newClocks = [];
+    for (let i = 0; i < clocks.length; i++) {
+      const clock = clocks[i];
+      clock.time = DateTime.local().setZone(clock.zone).toFormat('H:mm');
+      newClocks.push(clock);
+    }
+    setClocks(newClocks); 
+  };
 
   useEffect(() => {
-    setInterval(() => {
-      const dateObject = new Date();
-      const hour = dateObject.getHours();
-      const minute = dateObject.getMinutes();
-      //const second = dateObject.getSeconds();
-      const currentTime = hour.toString().padStart(2, '0') + ':' + minute.toString().padStart(2, '0');
-
-      const dateOffsetObject = new Date(dateObject.getTime() + (dateObject.getTimezoneOffset() * 60 * 1000) + (60 * 60 * 1000));
-      const hourOffset = dateOffsetObject.getHours();
-      const minuteOffset = dateOffsetObject.getMinutes();
-      //const secondOffset = dateOffsetObject.getSeconds();
-      const offsetTime = hourOffset.toString().padStart(2, '0') + ':' + minuteOffset.toString().padStart(2, '0');
-      setTime(currentTime);
-      setTimeOffset(offsetTime);
-    }, 1000)
+    updateClocks();
+    const interval = setInterval(() => {
+      updateClocks();
+    }, 1000);
+    return () => clearInterval(interval);
   }, []);
 
   return (
     <div id='clocks'>
-      <div className='cph'>
-        <span>CPH</span>
-        <time>{ timeOffset }</time>
-      </div>
-      <div className='ktm'>
-        <span>KTM</span>
-        <time>{ time }</time>
-      </div>
+      {
+        clocks.map((clock, index) => (
+          <div key={index} className='clock'>
+            <span>{ clock.name }</span>
+            <time>{ clock.time }</time>
+          </div>
+        ))
+      }
     </div>
   );
 }
